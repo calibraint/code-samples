@@ -1,0 +1,192 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: TourService</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.vividmind.tours.service</a> ]
+</div>
+
+<h1>Coverage Summary for Class: TourService (com.vividmind.tours.service)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TourService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (35/ 35)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TourService$MockitoMock$1191672144</td>
+  </tr>
+  <tr>
+    <td class="name">TourService$MockitoMock$1191672144$auxiliary$0ZbYvO1c</td>
+  </tr>
+  <tr>
+    <td class="name">TourService$MockitoMock$1191672144$auxiliary$GFAp1pW3</td>
+  </tr>
+  <tr>
+    <td class="name">TourService$MockitoMock$1191672144$auxiliary$GInkldXJ</td>
+  </tr>
+  <tr>
+    <td class="name">TourService$MockitoMock$1191672144$auxiliary$yoDRknrf</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (35/ 35)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.vividmind.tours.service;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.vividmind.http.dto.TourList;
+<i>4</i>&nbsp;import com.vividmind.http.dto.TourResponse;
+<i>5</i>&nbsp;import com.vividmind.http.service.TourHttpService;
+<i>6</i>&nbsp;import com.vividmind.tours.model.entity.Tour;
+<i>7</i>&nbsp;import com.vividmind.tours.repository.TourRepository;
+<i>8</i>&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+<i>9</i>&nbsp;import org.springframework.http.HttpStatus;
+<i>10</i>&nbsp;import org.springframework.stereotype.Service;
+<i>11</i>&nbsp;import retrofit2.Response;
+<i>12</i>&nbsp;
+<i>13</i>&nbsp;import java.io.IOException;
+<i>14</i>&nbsp;import java.util.ArrayList;
+<i>15</i>&nbsp;import java.util.Collections;
+<i>16</i>&nbsp;import java.util.List;
+<i>17</i>&nbsp;import java.util.stream.Collectors;
+<i>18</i>&nbsp;
+<i>19</i>&nbsp;@Service
+<b class="fc"><i>20</i>&nbsp;public class TourService {</b>
+<i>21</i>&nbsp;
+<i>22</i>&nbsp;    @Autowired
+<i>23</i>&nbsp;    private TourRepository tourRepository;
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    @Autowired
+<i>26</i>&nbsp;    private TourHttpService tourHttpService;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    public List&lt;String&gt; filterTourNames(String filter) {
+<b class="fc"><i>29</i>&nbsp;        List&lt;Tour&gt; tours = null;</b>
+<b class="fc"><i>30</i>&nbsp;        List&lt;String&gt; tourNames = new ArrayList&lt;&gt;();</b>
+<i>31</i>&nbsp;
+<b class="fc"><i>32</i>&nbsp;        if (filter != null &amp;&amp; !filter.isEmpty()) {</b>
+<b class="fc"><i>33</i>&nbsp;            tours = tourRepository.findByNameContainingIgnoreCase(filter);</b>
+<i>34</i>&nbsp;        } else {
+<b class="fc"><i>35</i>&nbsp;            tours = tourRepository.findAll();</b>
+<i>36</i>&nbsp;        }
+<i>37</i>&nbsp;
+<b class="fc"><i>38</i>&nbsp;        if (tours.size() &gt; 0) {</b>
+<b class="fc"><i>39</i>&nbsp;            for (Tour row : tours) {</b>
+<b class="fc"><i>40</i>&nbsp;                tourNames.add(row.getName());</b>
+<b class="fc"><i>41</i>&nbsp;            }</b>
+<i>42</i>&nbsp;        }
+<i>43</i>&nbsp;
+<b class="fc"><i>44</i>&nbsp;        return tourNames;</b>
+<i>45</i>&nbsp;    }
+<i>46</i>&nbsp;
+<i>47</i>&nbsp;    public HttpStatus refreshTours(String filter) {
+<i>48</i>&nbsp;        try {
+<b class="fc"><i>49</i>&nbsp;            Response response = tourHttpService.getTours();</b>
+<i>50</i>&nbsp;
+<b class="fc"><i>51</i>&nbsp;            if (response.code() &gt;= 300) {</b>
+<b class="fc"><i>52</i>&nbsp;                return HttpStatus.valueOf(response.code());</b>
+<i>53</i>&nbsp;            }
+<i>54</i>&nbsp;
+<b class="fc"><i>55</i>&nbsp;            Response&lt;TourResponse&gt; tourResponse = response;</b>
+<i>56</i>&nbsp;
+<b class="fc"><i>57</i>&nbsp;            List&lt;TourList&gt; tours = tourResponse.body() != null ? tourResponse.body().getTourLists() : Collections.emptyList();</b>
+<i>58</i>&nbsp;
+<b class="fc"><i>59</i>&nbsp;            if (tours.size() &gt; 0) {</b>
+<b class="fc"><i>60</i>&nbsp;                if (filter != null &amp;&amp; !filter.isEmpty()) {</b>
+<b class="fc"><i>61</i>&nbsp;                    tours = tours.stream()</b>
+<b class="fc"><i>62</i>&nbsp;                            .filter(tourList -&gt; tourList.getName().toLowerCase().contains(filter.toLowerCase()))</b>
+<b class="fc"><i>63</i>&nbsp;                            .collect(Collectors.toList());</b>
+<i>64</i>&nbsp;                }
+<i>65</i>&nbsp;
+<b class="fc"><i>66</i>&nbsp;                if (tours.size() &gt; 0) {</b>
+<b class="fc"><i>67</i>&nbsp;                    tourRepository.deleteAll();</b>
+<i>68</i>&nbsp;                }
+<i>69</i>&nbsp;
+<i>70</i>&nbsp;                for (TourList tourList :
+<b class="fc"><i>71</i>&nbsp;                        tours) {</b>
+<b class="fc"><i>72</i>&nbsp;                    Tour tour = new Tour();</b>
+<b class="fc"><i>73</i>&nbsp;                    tour.setId(tourList.getId());</b>
+<b class="fc"><i>74</i>&nbsp;                    tour.setName(tourList.getName());</b>
+<b class="fc"><i>75</i>&nbsp;                    tour.setLongDesc(tourList.getLongDesc());</b>
+<b class="fc"><i>76</i>&nbsp;                    tourRepository.save(tour);</b>
+<b class="fc"><i>77</i>&nbsp;                }</b>
+<i>78</i>&nbsp;            }
+<i>79</i>&nbsp;
+<b class="fc"><i>80</i>&nbsp;        } catch (IOException e) {</b>
+<b class="fc"><i>81</i>&nbsp;            e.printStackTrace();</b>
+<b class="fc"><i>82</i>&nbsp;            return HttpStatus.INTERNAL_SERVER_ERROR;</b>
+<b class="fc"><i>83</i>&nbsp;        }</b>
+<i>84</i>&nbsp;
+<b class="fc"><i>85</i>&nbsp;        return HttpStatus.OK;</b>
+<i>86</i>&nbsp;    }
+<i>87</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2018-12-11 22:42</div>
+</div>
+</body>
+</html>
