@@ -1,0 +1,49 @@
+<div class="m-b-3">
+  <label id="{{_.kebabCase(title) | lowercase}}" class="">{{title}}</label>
+  <div class="custom-select-button">
+    <div [matMenuTriggerFor]="menu" class="full-width text-capitalize text-left p-a-1 p-l-2">
+      <p class="subtitle p-r-3 text-truncate">
+        {{
+          (start && end)
+            ? (isAllTimeShown && isAllTimeSelected
+                  ? ('FILTERS.ALL_TIME' | translate)
+                  : ((start | date :'dd MMM yyyy') + ' - ' + (end | date :'dd MMM yyyy')))
+            : 'Select'
+        }}
+      </p>
+      <i class="material-icons">arrow_drop_down</i>
+    </div>
+  </div>
+  <mat-menu #menu="matMenu" [overlapTrigger]="true" class="filter-box-menu">
+    <ng-template matMenuContent>
+      <ng-container *ngIf="isFutureDate">
+        <button id="{{_.kebabCase(title) | lowercase}}-next-7-days" mat-menu-item (click)="selectFutureDate(6)">
+          {{'FILTERS.NEXT_7' | translate}}
+        </button>
+        <button id="{{_.kebabCase(title) | lowercase}}-next-30-days" mat-menu-item (click)="selectFutureDate(29)">
+          {{'FILTERS.NEXT_30' | translate}}
+        </button>
+        <button id="{{_.kebabCase(title) | lowercase}}-next-90-days" mat-menu-item (click)="selectFutureDate(89)">
+          {{'FILTERS.NEXT_90' | translate}}
+        </button>
+      </ng-container>
+      <ng-container *ngIf="!isFutureDate">
+        <button id="{{_.kebabCase(title) | lowercase}}-last-7-days" mat-menu-item (click)="selectRange(6)">
+          {{'FILTERS.LAST_7' | translate}}
+        </button>
+        <button id="{{_.kebabCase(title) | lowercase}}-last-30-days" mat-menu-item (click)="selectRange(29)">
+          {{'FILTERS.LAST_30' | translate}}
+        </button>
+        <button id="{{_.kebabCase(title) | lowercase}}-last-90-days" mat-menu-item (click)="selectRange(89)">
+          {{'FILTERS.LAST_90' | translate}}
+        </button>
+      </ng-container>
+      <button *ngIf="isAllTimeShown" id="{{_.kebabCase(title) | lowercase}}-all-time" mat-menu-item (click)="showAllTimeData()">
+        {{'FILTERS.ALL_TIME' | translate}}
+      </button>
+      <button id="{{_.kebabCase(title) | lowercase}}-custom-date" mat-menu-item (click)="openModal()">
+        {{'FILTERS.CUSTOM_DATE_RANGE' | translate}}
+      </button>
+    </ng-template>
+  </mat-menu>
+</div>

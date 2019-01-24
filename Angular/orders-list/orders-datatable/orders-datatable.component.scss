@@ -1,0 +1,297 @@
+@import "../../../../node_modules/assets/styles/settings/colors";
+@import "../../../../node_modules/assets/styles/settings/variables";
+@import "../../../../node_modules/assets/styles/settings/color-palette";
+
+.table-container {
+  .mat-table {
+    max-height: calc(100vh - 257px);
+    overflow-y: auto;
+
+    &.body-table {
+      min-height: calc(100vh - 257px);
+    }
+
+    &.orders-datatable .mat-header-row {
+      background: $text-white-primary;
+      border-bottom-width: 2px;
+      padding-right: 0;
+
+      .mat-header-cell {
+        font-size: 12px;
+        font-weight: 500;
+        padding: $spacer8 $spacer16 $spacer8 0;
+
+        &:first-child {
+          width: 40px;
+          flex: unset;
+        }
+        &:nth-child(3), &:nth-child(4), &:nth-child(6), &:nth-child(8), &:nth-child(9) {
+          flex: 1.4;
+        }
+      }
+    }
+
+    .mat-row {
+      height: auto;
+      padding-right: 0;
+    }
+
+    i.material-icons {
+      width: 20px;
+      height: 20px;
+      font-size: 20px;
+      display: inline-block;
+      color: $text-grey-hint;
+    }
+
+    &.orders-datatable .mat-cell {
+      color: $text-grey-secondary;
+      font-size: 13px;
+
+      pill-status {
+        display: inline-block;
+      }
+
+      &:first-child {
+        width: 40px;
+        flex: unset;
+      }
+      &:nth-child(3), &:nth-child(4), &:nth-child(6), &:nth-child(8), &:nth-child(9) {
+        flex: 1.4;
+      }
+    }
+
+    &.all-orders {
+      .mat-header-row {
+        background: $text-white-primary;
+        border-bottom-width: 2px;
+        padding-right: 0;
+
+        .mat-header-cell {
+          font-size: 12px;
+          font-weight: 500;
+          padding: $spacer8 $spacer16 $spacer8 0;
+
+          &:first-child {
+            width: 40px;
+            flex: unset;
+          }
+
+          &:nth-child(4), &:nth-child(5), &:nth-child(7), &:nth-child(9), &:nth-child(10) {
+            flex: 1.4;
+          }
+        }
+      }
+
+      .mat-cell {
+        color: $text-grey-secondary;
+        font-size: 13px;
+
+        pill-status {
+          display: inline-block;
+        }
+
+        &:first-child {
+          width: 40px;
+          flex: unset;
+        }
+
+        &:nth-child(4), &:nth-child(5), &:nth-child(7), &:nth-child(9), &:nth-child(10) {
+          flex: 1.4;
+        }
+      }
+    }
+  }
+
+}
+
+.canceled-order {
+  border-left: 4px solid $inkRed;
+}
+
+.open-order {
+  border-left: 4px solid $blue;
+}
+
+.completed-order {
+  border-left: 4px solid $inkGreen;
+}
+
+/* Bulk action styles here */
+
+.selection-completed {
+  background-color: $blue-lighten5;
+  padding: 20px $spacer24;
+
+  p {
+    color: $blue;
+    font-size: 16px;
+    margin-bottom: 0;
+    line-height: $spacer24;
+  }
+
+  i {
+    color: $blue;
+    float: right;
+    margin-right: $spacer24;
+
+    &:first-child {
+      margin-right: 0 !important;
+    }
+
+    &.disabled {
+      color: $text-grey-hint;
+      opacity: .5;
+      cursor: not-allowed;
+    }
+  }
+
+}
+
+// Small screens
+
+/* max-width 640px, medium screens */
+
+@media only screen and (max-width: 640px) {
+  .table-container {
+    margin-top: 0;
+    .m-table {
+      display: flex;
+      padding: $spacer16;
+      border-bottom: 1px solid $dividerGrey;
+      .mat-checkbox {
+        padding-right: $spacer16;
+      }
+      .m-status {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 4px;
+        .status-name {
+          margin: 0;
+          font-size: 14px;
+          line-height: 1;
+          text-align: left;
+          color: $blue;
+        }
+      }
+      .m-header {
+        .header {
+          font-size: 16px;
+          font-weight: 500;
+          line-height: 1.25;
+          text-align: left;
+          color: $text-grey-primary;
+          margin: 0;
+        }
+        p {
+          margin: 0;
+          font-size: 13px;
+          line-height: 1.54;
+          color: $text-grey-secondary;
+        }
+      }
+      .m-date {
+        h6 {
+          font-size: 12px;
+          line-height: 1.67;
+          text-align: left;
+          color: $text-grey-secondary;
+          margin: 0;
+        }
+        p {
+          margin: 0;
+          font-size: 13px;
+          line-height: 1.54;
+          text-align: left;
+          color: $text-grey-primary;
+        }
+        .tag {
+          padding: 0 $spacer8 !important;
+          font-size: 11px !important;
+        }
+      }
+
+      .quick-books {
+        width: 36px;
+        display: flex;
+        flex-direction: column;
+
+        mat-checkbox {
+          padding-bottom: $spacer8;
+        }
+
+        img {
+          width: 24px;
+        }
+      }
+    }
+  }
+}
+
+// Medium screens
+
+/* max-width 1024px, medium screens */
+
+@media only screen and (min-width: 641px) and (max-width: 1024px) {
+  .table-container {
+
+    .table-horizontal-scroll {
+      max-width: 100%;
+      overflow: auto;
+    }
+
+    .mat-table {
+      display: inline-block;
+      max-height: calc(100vh - 263px);
+
+      &.body-table {
+        min-height: calc(100vh - 263px);
+      }
+
+      .mat-cell, .mat-header-cell {
+        flex: unset !important;
+      }
+
+      .mat-header-cell {
+        width: 150px !important;
+
+        &:first-child {
+          width: 48px !important;
+        }
+        &:last-child {
+          width: 200px !important;
+        }
+
+      }
+
+      .mat-cell {
+        width: 150px !important;
+
+        &:first-child {
+          width: 48px !important;
+        }
+        &:last-child {
+          width: 200px !important;
+        }
+
+      }
+
+    }
+  }
+}
+
+@media only screen and (min-width: 1280px) and (max-width: 1365px) {
+  .mat-table.all-orders {
+    .mat-header-row .mat-header-cell {
+      &:nth-child(7), &:nth-child(9) {
+        flex: 1.5 !important;
+      }
+    }
+
+    .mat-cell {
+      &:nth-child(7), &:nth-child(9) {
+        flex: 1.5 !important;
+      }
+    }
+  }
+}

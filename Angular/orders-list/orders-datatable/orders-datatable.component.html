@@ -1,0 +1,366 @@
+<div class="selection-completed" *ngIf="selection.selected.length" id="bulk-actions-display">
+  <div class="float-left">
+    <p class="m-hide">{{(isAllPagesSelected() || allSelected) ? (pagination?.TotalResults < 2 ? pagination?.TotalResults + ' order': pagination?.TotalResults + ' orders') : this.selection.selected.length < 2 ? this.selection.selected.length + ' order' : this.selection.selected.length +' orders'}} selected</p>
+    <p class="hide m-show">{{selection.selected.length + ' selected'}}</p>
+  </div>
+  <div>
+    <i class="material-icons cursor float-right" id="print_btn" [matTooltip]="'Print Packing Slip'"
+       matTooltipPosition="before"
+       [matTooltipClass]="'tooltip-left'"
+       (click)="productionPackagingSlip()">how_to_vote</i>
+    <i class="material-icons cursor" [matTooltip]="'Generate Shopworks File'" matTooltipPosition="above" id="order-list-shopworks"
+       [matTooltipClass]="'top-menu-tooltip'" *ngIf="isShopWorksEnabled" (click)="downloadShopWorksexport()">list_alt</i>
+    <img [src]="'assets/base/img/quickbook-logo-blue.png' | addDomain" id="order-list-quickbooks{{isQuickbooksIIFEnabled ? '-iif' : ''}}"
+         *ngIf="isQuickbooksEnabled || isQuickbooksIIFEnabled"
+         class="material-icons cursor float-right w-24 m-r-3"
+         [matTooltip]="(isQuickbooksIIFEnabled ? 'ORDER.EXPORT_TO_QUICKBOOKS_IIF' : 'ORDER.EXPORT_TO_QUICKBOOKS') | translate" matTooltipPosition="above"
+         (click)="exportToQuickBooks()" [matTooltipClass]="'top-menu-tooltip'">
+    <i class="material-icons cursor" [matTooltip]="'ORDER.PRINT_RECEIPT' | translate" matTooltipPosition="above"
+       (click)="printSelectedOrders()" [matTooltipClass]="'top-menu-tooltip'" id="order-list-print">print</i>
+    <i class="material-icons cursor" [matTooltip]="'ORDER.DOWNLOAD_ORDERS(CSV)' | translate" matTooltipPosition="above" id="order-list-download"
+       (click)="downloadSelectedOrders()" [matTooltipClass]="'top-menu-tooltip'">file_download</i>
+    <ng-container *ngIf="_.isEqual(_.toLower(routerParams?.Status), 'open')">
+      <ng-container *ngIf="allSelected; else activeMarkAsShipped">
+        <i class="material-icons cursor disabled" id="order-list-ready-to-ship-disabled"
+           [matTooltip]="(this.selection.selected.length > 1 ? 'ORDER.MARK_ORDERS_AS_READY_TO_SHIP/PICKUP_AS_DISABLED' :
+           'ORDER.MARK_ORDER_AS_READY_TO_SHIP/PICKUP_AS_DISABLED') | translate"
+           matTooltipPosition="above"
+           [matTooltipClass]="'top-menu-tooltip'">done_all</i>
+      </ng-container>
+      <ng-template #activeMarkAsShipped>
+        <i class="material-icons cursor" id="order-list-ready-to-ship"
+           [matTooltip]="(this.selection.selected.length > 1 ? 'ORDER.MARK_ORDERS_AS_READY_TO_SHIP/PICKUP' :
+           'ORDER.MARK_ORDER_AS_READY_TO_SHIP/PICKUP') | translate"
+           matTooltipPosition="above"
+           (click)="markAsShipped.emit()"
+           [matTooltipClass]="'top-menu-tooltip'">done_all</i>
+      </ng-template>
+    </ng-container>
+  </div>
+  <div class="clearfix"></div>
+</div>
+
+<div class="table-container m-hide">
+  <div class="table-horizontal-scroll">
+    <mat-table #table [dataSource]="ordersDataSource" [trackBy]="trackById"
+               [ngClass]="{'all-orders': isAllOrder, 'orders-datatable': !isAllOrder}">
+      <!-- CheckBox -->
+      <ng-container matColumnDef="checkbox">
+        <mat-header-cell *matHeaderCellDef>
+          <mat-checkbox
+            *ngIf="!_.isEqual(routerParams?.Status, 'Canceled')"
+            #headerCheckbox
+            (change)="$event ? headerToggle(menuTrigger) : null"
+            [checked]="selection.hasValue() && (isAllSelected() || isAllPagesSelected())"
+            [indeterminate]="selection.hasValue() && !(isAllSelected() || isAllPagesSelected())">
+            <button [matMenuTriggerFor]="menu"
+                    #menuTrigger="matMenuTrigger"></button>
+          </mat-checkbox>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="selectAllFields()">Select All</button>
+            <button mat-menu-item (click)="selectCurrentPageFields()">Select Current Page</button>
+          </mat-menu>
+        </mat-header-cell>
+      </ng-container>
+
+      <!-- Status -->
+      <ng-container matColumnDef="status">
+        <mat-header-cell *matHeaderCellDef class="text-center">
+          <span class="cursor inline-flex align-item-center" (click)="sort('StatusDescription')">Status
+            <i class="material-icons m-l-1 {{isDescending('StatusDescription')}}">sort</i>
+          </span>
+        </mat-header-cell>
+      </ng-container>
+
+      <!-- Order Id -->
+      <ng-container matColumnDef="orderId">
+        <mat-header-cell *matHeaderCellDef>
+          <span class="cursor inline-flex align-item-center" (click)="sort('ID')">Order #
+            <i class="material-icons m-l-1 {{isDescending('ID')}}">sort</i>
+          </span>
+        </mat-header-cell>
+      </ng-container>
+
+      <!-- Customer Name -->
+      <!-- <ng-container matColumnDef="customer_name">
+        <mat-header-cell *matHeaderCellDef>
+          <span mat-button [matMenuTriggerFor]="customerSortMenu">
+            <span class="cursor inline-flex align-item-center">Customer
+              <i class="material-icons m-l-1 {{isDescending('FirstName')}} {{isDescending('LastName')}}">sort</i></span>
+            </span>
+          <mat-menu #customerSortMenu="matMenu">
+            <button mat-menu-item (click)="sort('FirstName', 'Ascending')">FirstName (A-Z)</button>
+            <button mat-menu-item (click)="sort('FirstName', 'Decending')">FirstName (Z-A)</button>
+            <button mat-menu-item (click)="sort('LastName', 'Ascending')">LastName (A-Z)</button>
+            <button mat-menu-item (click)="sort('LastName', 'Decending')">LastName (Z-A)</button>
+          </mat-menu>
+        </mat-header-cell>
+      </ng-container> -->
+
+      <!-- Customer Name -->
+      <ng-container matColumnDef="customer_name">
+        <mat-header-cell *matHeaderCellDef>
+          <span class="cursor inline-flex align-item-center" (click)="sort('Customer')">Customer
+            <i class="material-icons m-l-1 {{isDescending('Customer')}}">sort</i>
+          </span>
+        </mat-header-cell>
+      </ng-container>
+
+      <!-- Email -->
+      <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef>
+          <span class="cursor inline-flex align-item-center" (click)="sort('Email')">Email
+            <i class="material-icons m-l-1 {{isDescending('Email')}}">sort</i>
+          </span>
+        </mat-header-cell>
+      </ng-container>
+
+      <!-- Store / Organization -->
+      <ng-container matColumnDef="store_organization">
+        <mat-header-cell *matHeaderCellDef>
+          <span class="cursor inline-flex align-item-center" (click)="sort('StoreName')">Store
+            <i class="material-icons m-l-1 {{isDescending('StoreName')}}">sort</i>
+          </span>
+        </mat-header-cell>
+      </ng-container>
+
+      <!-- Order Date -->
+      <ng-container matColumnDef="order_date">
+        <mat-header-cell *matHeaderCellDef>
+          <span class="cursor inline-flex align-item-center" (click)="sort('DateCreated')">Order Date
+            <i class="material-icons m-l-1 {{isDescending('DateCreated')}}">sort</i>
+          </span>
+        </mat-header-cell>
+      </ng-container>
+
+      <!-- Ship / PickUp Date -->
+      <ng-container matColumnDef="ship_pickUp">
+        <mat-header-cell *matHeaderCellDef>
+          <span class="cursor inline-flex align-item-center" (click)="sort('EstimatedShipDate')">Ship / Pickup Date
+            <i class="material-icons m-l-1 {{isDescending('EstimatedShipDate')}}">sort</i>
+          </span>
+        </mat-header-cell>
+      </ng-container>
+
+      <!-- Order Total -->
+      <ng-container matColumnDef="order_total">
+        <mat-header-cell *matHeaderCellDef>
+          <span class="cursor inline-flex align-item-center" (click)="sort('TotalAmount')">Order Total
+            <i class="material-icons m-l-1 {{isDescending('TotalAmount')}}">sort</i>
+          </span>
+        </mat-header-cell>
+      </ng-container>
+
+      <!-- Order Status -->
+      <ng-container matColumnDef="production_status">
+        <mat-header-cell *matHeaderCellDef class="text-center">
+          <span class="cursor inline-flex align-item-center" (click)="sort('ProductionStatus')">Order Status
+            <i class="material-icons m-l-1 {{isDescending('ProductionStatus')}}">sort</i>
+          </span>
+        </mat-header-cell>
+      </ng-container>
+
+      <!-- Payment Status -->
+      <ng-container matColumnDef="payment_status">
+        <mat-header-cell *matHeaderCellDef class="text-center">
+          <span class="cursor inline-flex align-item-center" (click)="sort('PaymentStatus')">Payment Status
+            <i class="material-icons m-l-1 {{isDescending('PaymentStatus')}}">sort</i>
+          </span>
+        </mat-header-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    </mat-table>
+
+    <mat-table
+      [ngClass]="{'body-table' : loading && !_.size(ordersDataSource.data) ||
+      _.size(ordersDataSource.data) != 0, 'all-orders': isAllOrder, 'orders-datatable': !isAllOrder}"
+      #table
+      [dataSource]="ordersDataSource"
+      [trackBy]="trackById">
+      <!-- CheckBox -->
+      <ng-container matColumnDef="checkbox">
+        <mat-cell *matCellDef="let order">
+          <mat-checkbox
+            *ngIf="!_.isEqual(routerParams?.Status, 'Canceled')"
+            (change)="$event ? selection.toggle(order) : null; allSelected = false"
+            [checked]="selection.isSelected(order)"></mat-checkbox>
+          <img [src]="'/assets/base/img/quickbook-logo.png' | addDomain" *ngIf="order?.ExportedToQuickBooks">
+        </mat-cell>
+      </ng-container>
+
+      <!-- Status -->
+      <ng-container matColumnDef="status">
+        <mat-cell *matCellDef="let order" class="text-center">
+          <i class="material-icons text-{{statusColorMatch[_.lowerCase(orderStatusMatch[_.lowerCase(order?.Status)])]}}">
+            {{statusIconMatch[_.lowerCase(orderStatusMatch[_.lowerCase(order?.Status)])]}}
+          </i>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Order Id -->
+      <ng-container matColumnDef="orderId">
+        <mat-cell class="f-s-14" *matCellDef="let order">
+          <a routerLink="/order/{{order.ID}}">#{{order.ID || '-'}}</a>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Customer Name -->
+      <ng-container matColumnDef="customer_name">
+        <mat-cell *matCellDef="let order" class="text-truncate">
+          {{order.Customer || '-'}}
+        </mat-cell>
+      </ng-container>
+
+      <!-- Customer Name -->
+      <!-- <ng-container matColumnDef="customer_name">
+        <mat-cell class="text-dark text-truncate f-w-500" *matCellDef="let order">
+          {{(order.UserId ? (order.FirstName && order.LastName ? (routerParams?.OrderBy === 'LastName' ?
+          (_.capitalize(order.LastName) + (_.size(_.trim(order.LastName)) ? ', ' : '') + _.capitalize(order.FirstName)) :
+          _.capitalize(order.FirstName) + ' ' +
+          _.capitalize(order.LastName)) : '-') : '-')}}
+        </mat-cell>
+      </ng-container> -->
+
+      <!-- Email -->
+      <ng-container matColumnDef="email">
+        <mat-cell *matCellDef="let order" class="text-truncate">
+          <a href="mailto:{{order.Email}}" *ngIf="order.Email">{{order.Email}}</a>
+          <p class="m-b-0" *ngIf="!order.Email">-</p>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Store / Organization -->
+      <ng-container matColumnDef="store_organization">
+        <mat-cell *matCellDef="let order" class="text-truncate">
+          <ng-container *ngIf="order.StoreName || order.CompanyName; else showUserName">
+            {{order.StoreName || order.CompanyName   || '-'}}
+          </ng-container>
+          <ng-template #showUserName>
+            <a href="/contact/{{order.UserId}}">{{order.FirstName + ' ' + order.LastName || '-'}}</a>
+          </ng-template>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Order Date -->
+      <ng-container matColumnDef="order_date">
+        <mat-cell *matCellDef="let order">
+          {{order.DateCreated | date:'dd MMM y': 'UTC' || '-'}}
+        </mat-cell>
+      </ng-container>
+
+      <!-- Ship / PickUp Date -->
+      <ng-container matColumnDef="ship_pickUp">
+        <mat-cell *matCellDef="let order">
+          {{(order.ConfirmedShipDate || order.EstimatedShipDate) | date:'dd MMM y': 'UTC' || '-'}}
+        </mat-cell>
+      </ng-container>
+
+      <!-- Order Total -->
+      <ng-container matColumnDef="order_total">
+        <mat-cell class="text-dark" *matCellDef="let order">
+          ${{order.TotalAmount | number : '1.2-2'}}
+        </mat-cell>
+      </ng-container>
+
+      <!-- Order Status -->
+      <ng-container matColumnDef="production_status">
+        <mat-cell *matCellDef="let order" class="text-center">
+          <pill-status [status]="orderProductionStatus[order?.ProductionStatus | lowercase] || order?.ProductionStatus"></pill-status>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Payment Status -->
+      <ng-container matColumnDef="payment_status">
+        <mat-cell *matCellDef="let order" class="text-center">
+          <pill-status [status]="order?.PaymentStatus"></pill-status>
+        </mat-cell>
+      </ng-container>
+      <mat-row *matRowDef="let order; columns: displayedColumns;" [class]="routerParams?.Status === 'All' ? 'mat-row ' + _.lowerCase(orderStatusMatch[_.lowerCase(order?.Status)]) + '-order' : 'mat-row'"></mat-row>
+    </mat-table>
+  </div>
+
+  <div *ngIf="loading && !_.size(ordersDataSource.data) || _.size(ordersDataSource.data) == 0">
+    <div class="table-no-results">
+      <ng-container>
+        <div class="user-person">
+          <i class="material-icons md-inactive md-dark text-center">inbox</i>
+        </div>
+        <div class="m-t-3 no-order-summary" id="no-results-found">{{'ORDER.NO_ORDERS' | translate}}</div>
+      </ng-container>
+    </div>
+  </div>
+
+  <ink-paginator *ngIf="pagination" [pagination]="pagination" [limits]="[50, 100]"></ink-paginator>
+</div>
+
+<div class="table-container hide m-show"
+     data-infinite-scroll
+     debounce
+     [infiniteScrollContainer]="'#datatable-scroll'"
+     [scrollWindow]="false"
+     [fromRoot]="true"
+     (scrolled)="onScrollDown()">
+
+  <div class="m-table" *ngFor="let order of ordersDataSource.data">
+    <div class="quick-books">
+      <mat-checkbox
+        *ngIf="!_.isEqual(routerParams?.Status, 'Canceled')"
+        (change)="$event ? selection.toggle(order) : null; allSelected = false"
+        [checked]="selection.isSelected(order)"></mat-checkbox>
+      <img [src]="'assets/base/img/quickbook-logo.png' | addDomain" *ngIf="order?.ExportedToQuickBooks">
+    </div>
+    <div class="flex-1">
+      <div class="m-status">
+        <p class="status-name">
+          <a routerLink="/order/{{order.ID}}">#{{order.ID || '-'}}</a>
+        </p>
+        <pill-status [status]="order?.PaymentStatus" class="float-right"></pill-status>
+      </div>
+
+      <div class="m-header m-b-2">
+        <h3 class="header">
+          {{(order.UserId ? (order.FirstName && order.LastName ? (routerParams?.OrderBy === 'LastName' ?
+          (_.capitalize(order.LastName) + (_.size(_.trim(order.LastName)) ? ', ' : '') + _.capitalize(order.FirstName)) :
+          _.capitalize(order.FirstName) + ' ' +
+          _.capitalize(order.LastName)) : order.Email) : order.Email) || '-'}}
+        </h3>
+        <p>
+          <ng-container *ngIf="order.StoreName || order.CompanyName; else showUserName">
+            {{order.StoreName || order.CompanyName || '-'}}
+          </ng-container>
+          <ng-template #showUserName>
+            <a href="/contact/{{order.UserId}}">{{order.FirstName + ' ' + order.LastName || '-'}}</a>
+          </ng-template>
+        </p>
+      </div>
+
+      <div class="flex">
+        <div class="m-date">
+          <h6>Order Date</h6>
+          <p class="m-tag">{{order.DateCreated | date:'dd MMM y': 'UTC' || '-'}}</p>
+        </div>
+        <div class="m-date m-l-2">
+          <h6>Ship / Pickup Date</h6>
+          <p class="m-tag">{{(order.ConfirmedShipDate || order.EstimatedShipDate) | date:'dd MMM y': 'UTC' || '-'}}</p>
+        </div>
+        <div class="m-date m-l-2">
+          <h6>Order Total</h6>
+          <p class="m-tag">${{order.TotalAmount | number : '1.2-2'}}</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div *ngIf="loading && !_.size(ordersDataSource.data) || _.size(ordersDataSource.data) == 0">
+    <div class="table-no-results">
+      <ng-container>
+        <div class="user-person">
+          <i class="material-icons md-inactive md-dark text-center">inbox</i>
+        </div>
+        <div class="m-t-3 no-order-summary" id="no-results-found">{{'ORDER.NO_ORDERS' | translate}}</div>
+      </ng-container>
+    </div>
+  </div>
+</div>

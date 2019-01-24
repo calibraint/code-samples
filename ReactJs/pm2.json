@@ -1,0 +1,12 @@
+{
+    "apps": [
+        {
+            "name": "react",
+            "script": "npm",
+            "args": "run bs"
+        }
+    ]
+}
+
+
+

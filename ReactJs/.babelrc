@@ -1,0 +1,20 @@
+{
+  "presets": [
+    ["@babel/preset-env", { "targets": { "browsers": ["last 2 versions", "IE > 10"]} }],
+    "@babel/preset-react"
+  ],
+  "plugins": [
+    "@babel/plugin-syntax-dynamic-import",
+    "universal-import",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-transform-runtime",
+    "@babel/plugin-proposal-object-rest-spread"
+  ],
+	"env": {
+		"development": {
+			"plugins": [
+				"react-hot-loader/babel"
+			]
+		}
+	}
+}

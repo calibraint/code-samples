@@ -1,0 +1,7 @@
+index.js
+./assets
+./vscode
+./views
+./bootstrap/client-build
+./bootstrap/server-build
+./node_modules

@@ -1,0 +1,27 @@
+@import "../../../../../node_modules/assets/styles/settings/colors";
+@import "../../../../../node_modules/assets/styles/settings/variables";
+
+.custom-select-button {
+  border-radius: $global-border-radius;
+  background-color: $text-white-primary;
+  border: solid 1px #d9d9d9;
+  text-align: left;
+  position: relative;
+
+  &:hover {
+    cursor: pointer;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .24), 0 0 2px 0 rgba(0, 0, 0, .12);
+  }
+
+  i {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+  }
+}
+
+@media only screen and (max-width: 641px) {
+  .cdk-overlay-container {
+    z-index: 2000 !important;
+  }
+}
