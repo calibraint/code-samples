@@ -36,7 +36,7 @@
     "arrow-keys-react": "^1.0.6",
     "atob": "^2.1.2",
     "aws-sdk": "^2.376.0",
-    "bcrypt": "^3.0.3",
+    "bcrypt": "^5.0.0",
     "bluebird": "^3.5.3",
     "body-parser": "^1.15.1",
     "clever-widget": "0.0.34",
