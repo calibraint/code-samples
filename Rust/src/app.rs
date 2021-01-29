@@ -40,7 +40,9 @@ pub fn main(opts: CliOpts) -> Result<()> {
 
     // Collect image path from the cli
     let args: Vec<String> = env::args().collect();
-
+    if args.len() == 1 {
+        panic!("Please provide a valid path");
+    }
     // Get first argument from cli input
     let picture_1_path = args.get(1).unwrap();
     let path_1_ref: &str = &picture_1_path;

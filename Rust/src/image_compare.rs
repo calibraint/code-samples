@@ -2,7 +2,12 @@ use raster::compare;
 
 // open_img can be accessed by compare_image wich will use raster::open to return raster::image
 fn open_img(path: &str) -> raster::Image {
-    raster::open(path).unwrap()
+    let image = raster::open(path);
+    let image: raster::Image = match image {
+        Err(_) => panic!("Invalid image format | File not found"),
+        _ => image.unwrap()
+    };
+    image
 }
 
 // compare_image exposed to all file to comapre two images
