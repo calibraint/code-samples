@@ -1,5 +1,4 @@
 # Rust CLI Project
-[Boilerplate](https://github.com/ssokolow/rust-cli-boilerplate) reference https://github.com/ssokolow/rust-cli-boilerplate
 
 ## Features
 
@@ -13,8 +12,46 @@
 1. Clone a copy of this repository (`.git` must exist, so no archive downloads)
 2. Run `cargo build` to initalize required dependencies
 3. Edit `src/app.rs` to implement your application logic
-4. From `project root dir` run following command `cargo run <path to picture 1> <path to picture 2>`
+4. From src/ run following command `cargo run <path to picture 1> <path to picture 2>`
 5. From the same directory run `cargo test` to run the unit test case.
+
+### Tips
+
+- Edit the `DEFAULT` command. That's what it's there for.
+- You can use `just` from any subdirectory in your project. It's like `git` that
+  way.
+- `just path/to/project/` (note the trailing slash) is equivalent to
+  `(cd path/to/project; just)`
+- `just path/to/project/command` is equivalent to
+  `(cd path/to/project; just command)`
+
+- The simplest way to activate the bash completion installed by `just install`
+  is to add this to your `.bashrc`:
+
+  ```sh
+  for script in ~/.bash_completion.d/*; do
+    if [ -e "$script" ]; then
+      . "$script"
+    fi
+  done
+  ```
+
+      foo
+
+- The simplest way to activate the zsh completion installed by `just install` is
+  to add this to your `.zshrc`:
+
+  ```zsh
+  fpath=(~/.zsh/functions(:A) $fpath)
+  ```
+
+- When using clap/StructOpt validators for inputs such as filesystem paths, only
+  use them to bail out early on bad input, not as your only check. They're
+  conceptually similar to raw pointers and can be invalidated between when you
+  check them and when you try to use them because Rust can't control what the OS
+  and other programs do in the interim. See
+  [this blog post](http://blog.ssokolow.com/archives/2016/10/17/a-more-formal-way-to-think-about-validity-of-input-data/)
+  for more on this idea of references versus values in command-line arguments.
 
 ## Build Behaviour
 
