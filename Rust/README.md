@@ -6,7 +6,12 @@
 - Uses [Image crate](https://crates.io/crates/image) for image comparision.
 - Compares the each pixels between images (jpg | png ) and checks for Variation in lumosity, colour, etc.
 
-
+## Algorithm
+- Image is converted to RGB color sequence.
+- Dimension of both images are compared and evaluated on first case.
+- Pixels are converted to small chunks and iterated through each chunks.
+- Using [zip] function, created a tuple of pixels (Image 1 & Image 2).
+- Using [fold] Difference between each color sequence is evaluated from the tuple and returns the absolute difference of RGB channel for both the images.
 
 ## Usage
 
