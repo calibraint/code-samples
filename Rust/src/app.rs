@@ -51,10 +51,10 @@ pub fn main(opts: CliOpts) -> Result<()> {
     let picture_2_path = args.get(2).unwrap();
     let path_2_ref: &str = &picture_2_path;
 
-    let result: bool = compare_image(path_1_ref, path_2_ref);
+    let result: (i32, i32, i32) = compare_image(path_1_ref, path_2_ref);
     match result {
-        true => println!("Pictures are the same"),
-        false => println!("Pictures are the different"),
+        (0,0,0) => println!("Pictures are the same"),
+        _ => println!("Pictures are the different"),
     }
     Ok(())
 }
