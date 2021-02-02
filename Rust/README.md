@@ -3,8 +3,8 @@
 
 ## Features
 
-- Uses [raster](https://kosinix.github.io/raster/docs/raster/) for image comparision.
-- Uses [raster:compare] compares the each pixels between images (jpg | png ) and checks for Variation in lumosity, colour, etc.
+- Uses [Image](https://crates.io/crates/image) for image comparision.
+- Compares the each pixels between images (jpg | png ) and checks for Variation in lumosity, colour, etc.
 
 
 
