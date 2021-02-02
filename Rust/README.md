@@ -3,7 +3,7 @@
 
 ## Features
 
-- Uses [Image](https://crates.io/crates/image) for image comparision.
+- Uses [Image crate](https://crates.io/crates/image) for image comparision.
 - Compares the each pixels between images (jpg | png ) and checks for Variation in lumosity, colour, etc.
 
 
