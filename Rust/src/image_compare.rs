@@ -12,7 +12,7 @@ pub fn compare(image_1: &ImageBuffer<Rgb<u8>, Vec<u8>>, image_2: &ImageBuffer<Rg
 	let image_1_vec = image_1.as_flat_samples().samples;
     let image_2_vec = image_2.as_flat_samples().samples;
 
-	let result = image_1_vec
+	image_1_vec
         .chunks_exact(3)
         .zip(image_2_vec.chunks_exact(3))
         .fold((0, 0, 0), |(red, green, blue), (pixel_image_1, pixel_image_2)| {
@@ -21,8 +21,7 @@ pub fn compare(image_1: &ImageBuffer<Rgb<u8>, Vec<u8>>, image_2: &ImageBuffer<Rg
                 green + (pixel_image_1[1] as i32 - pixel_image_2[1] as i32).abs(),
                 blue + (pixel_image_1[2] as i32 - pixel_image_2[2] as i32).abs(),
             )
-        });
-    result
+        })
 }
 
 fn check_dimensions (dimension_1: (u32, u32), dimension_2: (u32, u32)) {
@@ -38,6 +37,5 @@ pub fn compare_image(path_1_ref: &str, path_2_ref: &str) -> (i32, i32, i32) {
     // Check dimensions
     check_dimensions(image_1.dimensions(), image_2.dimensions());
     // check pixel by pixel
-    let result = compare(&image_1, &image_2);
-    result
+    compare(&image_1, &image_2)
 }
