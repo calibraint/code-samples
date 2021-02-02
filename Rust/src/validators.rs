@@ -38,16 +38,16 @@ mod image_compare_test {
     pub fn test_equal() {
         let path_1 = join_path("cat_edited.jpg");
         let path_2 = join_path("cat_edited.jpg");
-        let result: bool = image_compare::compare_image(path_1.to_str().unwrap(), path_2.to_str().unwrap());
-        assert_eq!(result, true)
+        let result: (i32, i32, i32) = image_compare::compare_image(path_1.to_str().unwrap(), path_2.to_str().unwrap());
+        assert_eq!(result, (0, 0, 0))
     }
 
     // unit test case that will return false
     #[test]
     pub fn test_different() {
-        let path_1 = join_path("cat2.jpg");
-        let path_2 = join_path("cat_edited.jpg");
-        let result: bool = image_compare::compare_image(path_1.to_str().unwrap(), path_2.to_str().unwrap());
-        assert_eq!(result, false)
+        let path_1 = join_path("cat_edited.jpg");
+        let path_2 = join_path("cat2.jpg");
+        let result: (i32, i32, i32) = image_compare::compare_image(path_1.to_str().unwrap(), path_2.to_str().unwrap());
+        assert_eq!(result, (26488566, 42838250, 63024127))
     }
 }
