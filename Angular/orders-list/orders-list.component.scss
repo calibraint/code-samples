@@ -1,0 +1,59 @@
+@import "../../../node_modules/assets/styles/settings/colors";
+@import "../../../node_modules/assets/styles/settings/variables";
+
+.header-filter {
+  padding: 0 $spacer24 $spacer8 $spacer24;
+
+  .order-list-search {
+    .search-filter {
+      padding: 9px 40px;
+      line-height: 1;
+      min-height: 34px;
+    }
+    .icon-left {
+      position: absolute;
+      top: 6px;
+      left: 8px;
+
+      &.loader {
+        top: 8px !important;
+      }
+    }
+    .icon-right {
+      position: absolute;
+      top: 6px;
+      right: 8px;
+    }
+  }
+
+  .order-icon-list {
+    margin-top: 6px;
+
+    i {
+      color: $text-grey-secondary;
+    }
+  }
+}
+
+/* media styles here */
+
+// Small screens
+/* max-width 640px, mobile-only styles, use when QAing mobile issues */
+
+@media only screen and (max-width: 640px) {
+  .order-list-search {
+    display: flex;
+    align-items: center;
+  }
+
+  .header-filter {
+    padding: 0;
+  }
+}
+
+/* min-width 641px and max-width 1024px, use when QAing tablet-only issues */
+@media only screen and (min-width: 641px) and (max-width: 1024px) {
+  .header-filter {
+    padding: 0 $spacer16 $spacer8 $spacer16;
+  }
+}

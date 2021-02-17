@@ -1,0 +1,62 @@
+<div class="m-b-3">
+  <label>{{label}}</label>
+  <div class="custom-select-button">
+    <div [matMenuTriggerFor]="menu" class="full-width text-capitalize text-left p-a-1 p-l-2">
+      <p class="subtitle p-r-3 text-truncate">{{_.size(selectedLabel) ? selectedLabel : 'Select'}}</p>
+      <i class="material-icons">arrow_drop_down</i>
+    </div>
+  </div>
+  <mat-menu #menu="matMenu" [overlapTrigger]="true" (closed)="onClose()" class="filter-box-menu">
+    <div class="form-alt-space m-a-2" [ngClass]="{'hide': !showSearch} " (click)="$event.stopPropagation()">
+      <input #searchTags id="searchTags" class="form-control-alt" type="search" placeholder="Search" (keyup)="0" [(ngModel)]="searchText">
+      <i class="material-icons filter-input-search-img-icon text-light">search</i>
+    </div>
+    <ng-template matMenuContent>
+      <div class="filter-search-scroll">
+        <button mat-menu-item (click)="[selectedAllFields(), $event.stopPropagation(), performFilter()]" *ngIf="!searchText.length">
+          <mat-checkbox class="text-capitalize" #theCheckBox
+                        (click)="$event.stopPropagation()"
+                        (change)="[selectedAllFields(), performFilter()]"
+                        [checked]="(capturedFields?.length === filterArr?.length)"
+                        [indeterminate]="showIndeterminate">{{'COMMON.SELECT_ALL' | translate}}
+          </mat-checkbox>
+        </button>
+
+        <!-- Selected Fields -->
+        <ng-container *ngFor="let data of filterArr | searchfilter: {Name: searchTags.value}; let key = index;">
+          <ng-container *ngIf="data?.Checked">
+            <button mat-menu-item (click)="[selectField(data?.ID), $event.stopPropagation(), performFilter()]">
+              <mat-checkbox class="text-capitalize" (click)="$event.stopPropagation()"
+                            (change)="[selectField(data?.ID), performFilter()]"
+                            [checked]="(capturedFields?.indexOf(data?.ID) > -1)">{{data.Name}}
+              </mat-checkbox>
+            </button>
+          </ng-container>
+        </ng-container>
+
+        <mat-divider class="m-t-1 m-b-2" *ngIf="(showLine && (filterArr | searchfilter: {Name: searchTags.value})?.length !== 0) && !searchText.length"></mat-divider>
+
+        <!-- UnSelected Fields -->
+        <ng-container *ngFor="let keyName of _.keys(keyValuePair); let name = index">
+          <ng-container *ngIf="!filterName && _.size(getCheckedFilter(filterArr, keyValuePair[keyName]['key'], false) | searchfilter: {Name: searchTags.value}) &&  (label !== 'Job Stage') ">
+            <div class="filter-title text-uppercase" (click)="$event.stopPropagation();">{{_.size(getCheckedFilter(filterArr, keyValuePair[keyName]['key'], false)) ? keyValuePair[keyName]['key'] : ''}}</div>
+          </ng-container>
+          <ng-container *ngFor="let data of filterArr | searchfilter: {Name: searchTags.value}; let key = index;">
+            <ng-container *ngIf="keyValuePair[keyName]['key'] === data?.key && !data?.Checked">
+              <button mat-menu-item (click)="[selectField(data?.ID), $event.stopPropagation(), performFilter()]">
+                <mat-checkbox class="text-capitalize" (click)="$event.stopPropagation()"
+                              (change)="[selectField(data?.ID), performFilter()]"
+                              [checked]="(capturedFields?.indexOf(data?.ID) > -1)">{{data.Name}}
+                </mat-checkbox>
+              </button>
+            </ng-container>
+          </ng-container>
+        </ng-container>
+      </div>
+    </ng-template>
+    <ng-container *ngIf="!hideDoneButton">
+      <div class="divider-line"></div>
+      <button mat-button color="primary" class="full-width text-uppercase">{{'COMMON.DONE' | translate}}</button>
+    </ng-container>
+  </mat-menu>
+</div>

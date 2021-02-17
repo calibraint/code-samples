@@ -1,0 +1,238 @@
+<mat-sidenav-container class="sidenav-overlay-fixed">
+  <mat-sidenav #sidenav [mode]="'over'" [disableClose]="false" position="end" [fixedInViewport]="true"
+               [fixedTopGap]="56" [fixedBottomGap]="0" (openedStart)="sideNavOpen()" (closedStart)="sideNavClose()" class="filter-panel">
+    <h2 class="filter-header m-t-1 m-b-3">Filter Results</h2>
+    <div class="filter-body-scroll" #SideNavScroll>
+      <multi-filter [label]="'Stores'" [elementID]="'store'"
+                    [showSearch]="true" [valueKey]="'ID'"
+                    [filterData]="{'Stores': filterObjectValues.Stores}"
+                    [keyValuePair]="storeOrganizationKeyValuePair" [filterName]="null"
+                    [selectedFilterData]="{Stores: routerQueryParams?.Stores || []}"
+                    [urlNames]="['StoreIds']" (onFilter)="onFilter($event)">
+      </multi-filter>
+      <!--Assignee Filter-->
+      <filter-box
+        [name]="'Assignees'"
+        [label]="'PROPOSAL.ASSIGNEE' | translate"
+        [filterData]="filterObjectValues.Assignees"
+        [selectedFilterData]="routerQueryParams?.Assignees || []"
+        [showSearch]="true"
+        (onFilter)="onFilter($event)">
+      </filter-box>
+      <date-range-filter [title]="'Order Date Range'"
+                         [name]="'DateCreatedRange'"
+                         [isFutureDate]="false"
+                         [range]="routerQueryParams.DateCreatedRange"
+                         [actionTitle]="'Select the Order date range'"
+                         (onFilter)="onFilter($event)"></date-range-filter>
+      <date-range-filter [title]="'Ship / Pick Up Date Range'"
+                         [name]="'EstimatedShipDateRange'"
+                         [isFutureDate]="true"
+                         [range]="routerQueryParams.EstimatedShipDateRange"
+                         [actionTitle]="'Select the Ship/Pickup date range'"
+                         (onFilter)="onFilter($event)"></date-range-filter>
+      <filter-box
+        [name]="'OrderTypes'"
+        [label]="'Order Type'"
+        [filterData]="orderType"
+        [selectedFilterData]="routerQueryParams?.OrderTypes || []"
+        (onFilter)="onFilter($event)">
+      </filter-box>
+      <filter-box *ngIf="routerQueryParams.Status === 'Open' || routerQueryParams.Status === 'All'"
+                  [name]="'ProductionStatuses'"
+                  [label]="'Order Status'"
+                  [filterData]="productionStatus"
+                  [selectedFilterData]="routerQueryParams?.ProductionStatuses || []"
+                  (onFilter)="onFilter($event)">
+      </filter-box>
+      <filter-box
+        [name]="'PaymentStatuses'"
+        [label]="'Payment Status'"
+        [filterData]="paymentStatus"
+        [selectedFilterData]="routerQueryParams?.PaymentStatuses || []"
+        (onFilter)="onFilter($event)">
+      </filter-box>
+      <date-range-filter [title]="'Payment Due Date'"
+                         [name]="'DueDate'"
+                         [isFutureDate]="true"
+                         [range]="routerQueryParams.DueDate"
+                         [actionTitle]="'Select the Payment Due Date'"
+                         (onFilter)="onFilter($event)"></date-range-filter>
+    </div>
+    <button class="full-width m-b-1" mat-raised-button color="primary"
+            [disabled]="_.isEqual(routerQueryParams, oldRouterQueryParams)"
+            (click)="applyFilter(); sidenav.toggle()">Apply
+    </button>
+    <button class="full-width" mat-button color="primary" (click)="resetFilter(); sidenav.toggle()">Cancel</button>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <div class="grid-container fluid listview-content">
+
+      <div class="grid-x grid-padding-x header-filter p-b-1 m-p-b-0">
+        <div class="large-3 medium-4 small-6 m-hide">
+          <button class="dropdown-header mt-4 float-left" mat-button [matMenuTriggerFor]="orderStatusMenu">
+            {{routerQueryParams?.Status + ' ' + 'Orders'}}
+            <mat-icon class="ver-align-mid">arrow_drop_down</mat-icon>
+          </button>
+          <mat-menu #orderStatusMenu="matMenu" class="order-details-action-menu">
+            <button mat-menu-item [ngClass]="{'active': routerQueryParams.Status === 'Open'}"
+                    (click)="setOrderStatus('Open')">
+              <mat-icon class="text-light m-r-2" [ngClass]="{'text-blue': routerQueryParams.Status === 'Open'}">
+                panorama_fish_eye
+              </mat-icon>
+              {{'ORDER.ORDER_STATUS.OPEN' | translate}}
+            </button>
+            <button mat-menu-item [ngClass]="{'active': routerQueryParams.Status === 'Completed'}"
+                    (click)="setOrderStatus('Completed')">
+              <mat-icon [ngClass]="{'text-green': routerQueryParams.Status === 'Completed'}" class="text-light m-r-2">
+                done
+              </mat-icon>
+              {{'ORDER.ORDER_STATUS.COMPLETED' | translate}}
+            </button>
+            <button mat-menu-item [ngClass]="{'active': routerQueryParams.Status === 'Canceled'}"
+                    (click)="setOrderStatus('Canceled')">
+              <mat-icon class="text-light m-r-2" [ngClass]="{'text-red': routerQueryParams.Status === 'Canceled'}">
+                block
+              </mat-icon>
+              {{'ORDER.ORDER_STATUS.CANCELED' | translate}}
+            </button>
+            <button class="m-b-1" mat-menu-item [ngClass]="{'active': routerQueryParams.Status === 'All'}"
+                    (click)="setOrderStatus('All')">
+              <mat-icon class="text-light m-r-2">archive</mat-icon>
+              {{'ORDER.ORDER_STATUS.ALL' | translate}}
+            </button>
+            <!--remove Create Custom View-->
+            <!--<div class="divider-line"></div>-->
+            <!--<button class="text-uppercase full-width m-t-1" mat-button color="primary">-->
+              <!--Create Custom View-->
+            <!--</button>-->
+          </mat-menu>
+        </div>
+
+        <div class="large-6 medium-5 relative order-list-search m-hide">
+          <mat-form-field floatPlaceholder="never" class="full-width m-b-0">
+            <input id="search-production" #search [value]="routerQueryParams.Query || ''" matInput class="search-filter" (keyup.enter)="onSearch(search.value)" [placeholder]="'Search'" title="Search">
+          </mat-form-field>
+          <mat-icon class="text-grey icon-left cursor-default" *ngIf="!searching">search</mat-icon>
+          <mat-spinner *ngIf="searching" class="icon-left loader" [diameter]="20" [strokeWidth]="2"></mat-spinner>
+          <mat-icon class="text-grey icon-right cursor" *ngIf="_.size(search.value) && !searching" (click)="search.value = ''; onClear()">close</mat-icon>
+        </div>
+
+        <div class="large-3 medium-3 m-hide">
+          <div class="order-icon-list">
+            <i class="material-icons cursor float-right" (click)="sidenav.open(); resetRouterQueryParams()">filter_list</i>
+          </div>
+        </div>
+
+        <div class="hide m-show m-p-a-1 small-12 border-bottom">
+          <div class="flex p-l-1 p-r-1 p-b-1">
+
+            <div *ngIf="!showMobileSearch">
+              <button class="dropdown-header mt-4 float-left" mat-button [matMenuTriggerFor]="orderStatusMenu">
+                {{routerQueryParams?.Status + ' ' + 'Orders'}}
+                <mat-icon class="ver-align-mid">arrow_drop_down</mat-icon>
+              </button>
+              <mat-menu #orderStatusMenu="matMenu" class="order-details-action-menu">
+                <button mat-menu-item [ngClass]="{'active': routerQueryParams.Status === 'Open'}"
+                        (click)="setOrderStatus('Open')">
+                  <mat-icon class="text-light m-r-2" [ngClass]="{'text-blue': routerQueryParams.Status === 'Open'}">
+                    panorama_fish_eye
+                  </mat-icon>
+                  {{'ORDER.ORDER_STATUS.OPEN' | translate}}
+                </button>
+                <button mat-menu-item [ngClass]="{'active': routerQueryParams.Status === 'Completed'}"
+                        (click)="setOrderStatus('Completed')">
+                  <mat-icon [ngClass]="{'text-green': routerQueryParams.Status === 'Completed'}" class="text-light m-r-2">
+                    done
+                  </mat-icon>
+                  {{'ORDER.ORDER_STATUS.COMPLETED' | translate}}
+                </button>
+                <button mat-menu-item [ngClass]="{'active': routerQueryParams.Status === 'Canceled'}"
+                        (click)="setOrderStatus('Canceled')">
+                  <mat-icon class="text-light m-r-2" [ngClass]="{'text-red': routerQueryParams.Status === 'Canceled'}">
+                    block
+                  </mat-icon>
+                  {{'ORDER.ORDER_STATUS.CANCELED' | translate}}
+                </button>
+                <button class="m-b-1" mat-menu-item [ngClass]="{'active': routerQueryParams.Status === 'All'}"
+                        (click)="setOrderStatus('All')">
+                  <mat-icon class="text-light m-r-2">archive</mat-icon>
+                  {{'ORDER.ORDER_STATUS.ALL' | translate}}
+                </button>
+                <div class="divider-line"></div>
+                <button class="text-uppercase full-width m-t-1" mat-button color="primary">
+                  Create Custom View
+                </button>
+              </mat-menu>
+            </div>
+
+            <div class="flex-1 relative m-order-list-search">
+              <ng-container *ngIf="showMobileSearch">
+                <mat-form-field floatPlaceholder="never" class="full-width m-b-0">
+                  <input id="search-production" #search [value]="routerQueryParams.Query || ''" matInput class="search-filter" (keyup.enter)="onSearch(search.value)" [placeholder]="'Search'" title="Search">
+                </mat-form-field>
+                <mat-icon class="text-light icon-left cursor-default" *ngIf="!searching">search</mat-icon>
+                <mat-spinner *ngIf="searching" class="icon-left loader" [diameter]="20" [strokeWidth]="2" ></mat-spinner>
+                <mat-icon class="text-light icon-right cursor" *ngIf="_.size(search.value) && !searching" (click)="search.value = ''; onClear()">close</mat-icon>
+              </ng-container>
+            </div>
+
+            <div class="relative order-list-search" *ngIf="!showMobileSearch">
+              <mat-icon class="m-r-3 m-m-r-2 text-grey cursor" (click)="showMobileSearch = true">search</mat-icon>
+            </div>
+
+            <div class="">
+              <button class="float-right m-filter" mat-button color="primary" (click)="sidenav.open(); resetRouterQueryParams()">
+                <mat-icon class="text-grey">filter_list</mat-icon>
+                {{'FILTERS.FILTER' | translate}}
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <filter-chips
+          [displayQueryParams]="['ProductionStatuses', 'PaymentStatuses', 'OrderTypes', 'Organizations', 'Stores', 'EstimatedShipDateRange', 'DateCreatedRange', 'Assignees', 'DueDate']"
+          [dateKeyValuePairs]="{'EstimatedShipDateRange': 'Ship / Pickup Date Range', 'DateCreatedRange': 'Order Date Range', 'DueDate': 'Payment Due Date Range'}"
+          [arrayQueryParams]="['ProductionStatuses', 'PaymentStatuses', 'OrderTypes', 'Organizations', 'Stores', 'ShippingMethodIds', 'Assignees']"
+          [displayNamesForValues]="filterObjectValues">
+        </filter-chips>
+      </div>
+
+      <div class="grid-x grid-padding-x">
+        <div class="small-12 large-12 medium-12">
+          <orders-datatable
+            [orders]="orders"
+            [pagination]="pagination"
+            [limit]="limit"
+            [loading]="loading"
+            [isQuickbooksEnabled]="isQuickbooksEnabled"
+            [isShopWorksEnabled]="isShopWorksEnabled"
+            [isQuickbooksIIFEnabled]="isQuickbooksIIFEnabled"
+            [routerParams]="routerQueryParams"
+            (markAsShipped)="markAsReadyToShip()"
+            (infinityScroll)="infinityScroll()"
+            (selectedOrders)="selectedOrdersType($event)">
+          </orders-datatable>
+        </div>
+      </div>
+
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<div class="loader" *ngIf="loading && !searching">
+  <mat-spinner [diameter]="50" [strokeWidth]="5"></mat-spinner>
+</div>
+
+<print-receipts
+  id="print-section"
+  [hidden]="true"
+  [products]="bulkOrderPackage?.Products"
+  [orders]="bulkOrderPackage?.Orders"
+  [stores]="bulkOrderPackage?.Stores"
+  [publisher]="bulkOrderPackage?.Publisher">
+</print-receipts>

@@ -1,0 +1,67 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: TourRepository</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.vividmind.tours.repository</a> ]
+</div>
+
+<h1>Coverage Summary for Class: TourRepository (com.vividmind.tours.repository)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+</tr>
+  <tr>
+    <td class="name">TourRepository$MockitoMock$666552189</td>
+  </tr>
+  <tr>
+    <td class="name">TourRepository$MockitoMock$666552189$auxiliary$MkOvivZN</td>
+  </tr>
+  <tr>
+    <td class="name">TourRepository$MockitoMock$666552189$auxiliary$V6pWHo1V</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.vividmind.tours.repository;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.vividmind.tours.model.entity.Tour;
+<i>4</i>&nbsp;import org.springframework.data.jpa.repository.JpaRepository;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;import java.util.List;
+<i>7</i>&nbsp;
+<i>8</i>&nbsp;public interface TourRepository extends JpaRepository&lt;Tour, Integer&gt; {
+<i>9</i>&nbsp;
+<i>10</i>&nbsp;    List&lt;Tour&gt; findByNameContainingIgnoreCase(String name);
+<i>11</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2018-12-11 22:42</div>
+</div>
+</body>
+</html>

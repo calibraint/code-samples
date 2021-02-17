@@ -1,0 +1,136 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: ToursController</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.vividmind.tours.controller</a> ]
+</div>
+
+<h1>Coverage Summary for Class: ToursController (com.vividmind.tours.controller)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ToursController</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (2/ 10)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">ToursController$$EnhancerBySpringCGLIB$$24adade2</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    20%
+  </span>
+  <span class="absValue">
+    (2/ 10)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.vividmind.tours.controller;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.vividmind.tours.model.dto.Filter;
+<i>4</i>&nbsp;import com.vividmind.tours.service.TourService;
+<i>5</i>&nbsp;import org.springframework.beans.factory.annotation.Autowired;
+<i>6</i>&nbsp;import org.springframework.http.HttpStatus;
+<i>7</i>&nbsp;import org.springframework.http.ResponseEntity;
+<i>8</i>&nbsp;import org.springframework.security.access.prepost.PreAuthorize;
+<i>9</i>&nbsp;import org.springframework.web.bind.annotation.*;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import java.util.HashMap;
+<i>12</i>&nbsp;import java.util.List;
+<i>13</i>&nbsp;
+<i>14</i>&nbsp;@RestController
+<b class="fc"><i>15</i>&nbsp;public class ToursController {</b>
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    @Autowired
+<i>18</i>&nbsp;    TourService tourService;
+<i>19</i>&nbsp;
+<i>20</i>&nbsp;    @RequestMapping(value = &quot;/tours&quot;, method = RequestMethod.GET)
+<i>21</i>&nbsp;    @PreAuthorize(&quot;hasRole(&#39;USER&#39;)&quot;)
+<i>22</i>&nbsp;    public ResponseEntity&lt;List&gt; listTours(@RequestParam(value = &quot;filter&quot;, required = false) String filter) {
+<b class="fc"><i>23</i>&nbsp;        return new ResponseEntity&lt;&gt;(tourService.filterTourNames(filter), HttpStatus.OK);</b>
+<i>24</i>&nbsp;    }
+<i>25</i>&nbsp;
+<i>26</i>&nbsp;    @RequestMapping(value = &quot;/tours/refresh&quot;, method = RequestMethod.POST)
+<i>27</i>&nbsp;    @PreAuthorize(&quot;hasRole(&#39;ADMIN&#39;)&quot;)
+<i>28</i>&nbsp;    public ResponseEntity&lt;HashMap&gt; refreshTours(@RequestBody(required = false) Filter filter) {
+<b class="nc"><i>29</i>&nbsp;        String query = null;</b>
+<i>30</i>&nbsp;
+<b class="nc"><i>31</i>&nbsp;        if (filter != null) {</b>
+<b class="nc"><i>32</i>&nbsp;            query = filter.getFilter();</b>
+<i>33</i>&nbsp;        }
+<i>34</i>&nbsp;
+<b class="nc"><i>35</i>&nbsp;        HttpStatus status = tourService.refreshTours(query);</b>
+<i>36</i>&nbsp;
+<b class="nc"><i>37</i>&nbsp;        HashMap&lt;String, Object&gt; response = new HashMap&lt;&gt;();</b>
+<b class="nc"><i>38</i>&nbsp;        response.put(&quot;status&quot;, status.value());</b>
+<b class="nc"><i>39</i>&nbsp;        response.put(&quot;message&quot;, HttpStatus.valueOf(status.value()));</b>
+<i>40</i>&nbsp;
+<b class="nc"><i>41</i>&nbsp;        return new ResponseEntity&lt;&gt;(response, status);</b>
+<i>42</i>&nbsp;    }
+<i>43</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2018-12-11 22:42</div>
+</div>
+</body>
+</html>

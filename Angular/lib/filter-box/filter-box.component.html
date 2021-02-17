@@ -1,0 +1,53 @@
+<div class="m-b-3">
+  <label>{{label}}</label>
+  <div class="custom-select-button">
+    <div [matMenuTriggerFor]="menu" class="full-width text-capitalize text-left p-a-1 p-l-2">
+      <p class="subtitle p-r-3 text-truncate">{{_.size(selection.selected) === 1 ? _.get(_.first(selection.selected), 'Name') : (_.size(selection.selected) ? _.size(selection.selected) + ' selected' : 'Select')}}</p>
+      <i class="material-icons">arrow_drop_down</i>
+    </div>
+  </div>
+  <mat-menu #menu="matMenu" [overlapTrigger]="true" (closed)="onClose()" class="filter-box-menu">
+    <div class="form-alt-space m-a-2" [ngClass]="{'hide': !showSearch} " (click)="$event.stopPropagation()">
+      <input #searchTags id="searchTags" class="form-control-alt" type="search" placeholder="Search" (keyup)="0" [(ngModel)]="searchText">
+      <i class="material-icons filter-input-search-img-icon text-light">search</i>
+    </div>
+    <ng-template matMenuContent>
+      <div class="filter-search-scroll">
+        <button mat-menu-item (click)="[$event ? masterToggle() : null, $event.stopPropagation()]"
+                *ngIf="!searchText.length">
+          <mat-checkbox #theCheckBox
+                        (click)="$event.stopPropagation()"
+                        (change)="[$event ? masterToggle() : null, performFilter()]"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()">{{'COMMON.SELECT_ALL' | translate }}
+          </mat-checkbox>
+        </button>
+        <ng-container *ngFor="let row of filterData | searchfilter: {Name: searchTags.value}; let key = index;">
+          <ng-container *ngIf="selectionTemp.isSelected(row)">
+            <button mat-menu-item (click)="[$event ? selection.toggle(row) : null, $event.stopPropagation()]">
+              <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="[$event ? selection.toggle(row) : null, performFilter()]"
+                            [checked]="selection.isSelected(row)">{{_.get(row, 'Name')}}
+              </mat-checkbox>
+            </button>
+          </ng-container>
+        </ng-container>
+        <mat-divider class="m-t-1 m-b-2" *ngIf="!(_.isEqual(_.size(selectionTemp.selected), _.size(filterData))) && _.size(selectionTemp.selected) && !searchText.length"></mat-divider>
+        <ng-container *ngFor="let row of filterData | searchfilter: {Name: searchTags.value}; let key = index;">
+          <ng-container *ngIf="!selectionTemp.isSelected(row)">
+            <button mat-menu-item (click)="[$event ? selection.toggle(row) : null, $event.stopPropagation()]">
+              <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="[$event ? selection.toggle(row) : null, performFilter()]"
+                            [checked]="selection.isSelected(row)">{{_.get(row, 'Name')}}
+              </mat-checkbox>
+            </button>
+          </ng-container>
+        </ng-container>
+      </div>
+    </ng-template>
+    <ng-container *ngIf="!hideDoneButton">
+      <div class="divider-line"></div>
+      <button mat-button color="primary" class="full-width text-uppercase">{{'COMMON.DONE' | translate}}</button>
+    </ng-container>
+  </mat-menu>
+</div>

@@ -1,0 +1,137 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: TourHttpService</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.vividmind.http.service</a> ]
+</div>
+
+<h1>Coverage Summary for Class: TourHttpService (com.vividmind.http.service)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">TourHttpService</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (8/ 12)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">TourHttpService$MockitoMock$284656253</td>
+  </tr>
+  <tr>
+    <td class="name">TourHttpService$MockitoMock$284656253$auxiliary$EIKw4lpa</td>
+  </tr>
+  <tr>
+    <td class="name">TourHttpService$MockitoMock$284656253$auxiliary$tT5FoKdf</td>
+  </tr>
+  <tr>
+    <td class="name">TourHttpService$MockitoMock$284656253$auxiliary$VTuutPkF</td>
+  </tr>
+<tr>
+  <td class="name"><strong>total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (2/ 3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (8/ 12)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.vividmind.http.service;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.vividmind.http.config.APIConfiguration;
+<i>4</i>&nbsp;import com.vividmind.http.dto.TourResponse;
+<i>5</i>&nbsp;import org.springframework.stereotype.Service;
+<i>6</i>&nbsp;import retrofit2.Call;
+<i>7</i>&nbsp;import retrofit2.Response;
+<i>8</i>&nbsp;import retrofit2.Retrofit;
+<i>9</i>&nbsp;import retrofit2.converter.gson.GsonConverterFactory;
+<i>10</i>&nbsp;
+<i>11</i>&nbsp;import java.io.IOException;
+<i>12</i>&nbsp;
+<b class="fc"><i>13</i>&nbsp;@Service</b>
+<i>14</i>&nbsp;public class TourHttpService implements APIConfiguration {
+<i>15</i>&nbsp;
+<i>16</i>&nbsp;    private RepositoryInterface service;
+<i>17</i>&nbsp;
+<b class="fc"><i>18</i>&nbsp;    public TourHttpService() {</b>
+<b class="fc"><i>19</i>&nbsp;        Retrofit retrofit = new Retrofit.Builder()</b>
+<b class="fc"><i>20</i>&nbsp;                .baseUrl(APIConfiguration.API_BASE_URL)</b>
+<b class="fc"><i>21</i>&nbsp;                .addConverterFactory(GsonConverterFactory.create())</b>
+<b class="fc"><i>22</i>&nbsp;                .build();</b>
+<i>23</i>&nbsp;
+<b class="fc"><i>24</i>&nbsp;        service = retrofit.create(RepositoryInterface.class);</b>
+<b class="fc"><i>25</i>&nbsp;    }</b>
+<i>26</i>&nbsp;
+<i>27</i>&nbsp;    public Response&lt;TourResponse&gt; getTours() throws IOException {
+<b class="nc"><i>28</i>&nbsp;        Call&lt;TourResponse&gt; retrofitCall = service.refreshTours();</b>
+<i>29</i>&nbsp;
+<b class="nc"><i>30</i>&nbsp;        Response&lt;TourResponse&gt; response = retrofitCall.execute();</b>
+<i>31</i>&nbsp;
+<b class="nc"><i>32</i>&nbsp;        assert response.body() != null;</b>
+<b class="nc"><i>33</i>&nbsp;        return response;</b>
+<i>34</i>&nbsp;    }
+<i>35</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2018-12-11 22:42</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,8 @@
+.error-name {
+    position: relative;
+    top: -16px;
+    text-align: left;
+    margin: 0;
+    color: #E74C3C;
+    display: none;
+}

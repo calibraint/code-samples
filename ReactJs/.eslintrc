@@ -1,0 +1,95 @@
+{
+    "parser": "babel-eslint",
+
+    "extends": [
+        "eslint:recommended",
+        "plugin:import/warnings",
+        "plugin:jsx-a11y/recommended",
+        "plugin:react/recommended"
+    ],
+    "plugins": ["react", "jsx-a11y", "import"],
+
+    "globals": {
+        "moment": true,
+        "Chart": true
+    },
+
+    "parserOptions": {
+        "ecmaVersion": 2015,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+
+    "env": {
+        "browser": true,
+        "jquery": true,
+        "es6": true,
+        "node": true,
+        "mocha": true
+    },
+
+    "rules": {
+        "react/jsx-indent": [2, 4],
+        "import/no-named-as-default": [0],
+        "no-underscore-dangle": 0,
+        "comma-dangle": [1, "always-multiline"],
+        "indent": [2, 4],
+        "semi": ["warn", "never"],
+        "max-len": [1, 180, 4],
+        "arrow-body-style": ["warn", "as-needed"],
+        "no-trailing-spaces": ["warn"],
+        "operator-linebreak": ["warn", "before"],
+        "curly": ["warn"],
+        "brace-style": ["warn", "1tbs", {
+            "allowSingleLine": false
+        }],
+        "object-curly-spacing": ["warn", "always"],
+        "array-bracket-spacing": ["warn", "always"],
+        "no-useless-return": "warn",
+        "no-unused-vars": [
+            2,
+            {
+                "vars": "all",
+                "args": "after-used",
+                "argsIgnorePattern": "^_|^next$",
+                "varsIgnorePattern": "^_"
+            }
+        ],
+        "jsx-a11y/anchor-is-valid": [0],
+        "react/jsx-key": [1],
+        "react/no-danger": [1],
+        "react/jsx-no-bind": [1, {
+            "allowArrowFunctions": false
+        }],
+        "jsx-a11y/no-noninteractive-element-interactions": [1],
+        "jsx-a11y/no-noninteractive-tabindex": [1],
+        "jsx-a11y/label-has-associated-control": [1],
+        "jsx-a11y/no-static-element-interactions": [1],
+        "jsx-a11y/click-events-have-key-events": [1],
+        "jsx-a11y/interactive-supports-focus": [1],
+        "jsx-a11y/label-has-for": [1],
+        "jsx-a11y/no-onchange": [1],
+        "jsx-a11y/tabindex-no-positive": [1],
+        "jsx-a11y/role-supports-aria-props": [1],
+        "jsx-a11y/onclick-has-role": [1],
+        "jsx-a11y/no-autofocus": [1],
+        "no-useless-escape": [1],
+        "import/no-unresolved": [1],
+        "camelcase": [1, {
+            "allow": [
+                "^UNSAFE_"
+            ]
+        }]
+
+    },
+
+    "settings": {
+        "react": {
+            "version": "16"
+        },
+        "import/ignore": [".css$"],
+        "autoFixOnSave": true
+    }
+}

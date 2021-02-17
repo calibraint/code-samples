@@ -1,0 +1,80 @@
+.daterangepicker
+{
+    z-index: 1055 ! important;
+}
+.daterangepicker.dropdown-menu
+{
+    z-index: 9999 ! important;
+}
+.dropdown-menu
+{
+    z-index: 1055 ! important;
+}
+.sub-menu {
+    margin-left: 20px;
+}
+ul.breadcrumb {
+    list-style: none;
+    font-size: 12px;
+    margin: 10px 0px 6px -30px;
+}
+.breadcrumb {
+    background-color: #ededed;
+    display: inline-block;
+    font-weight: bold;
+}
+ul.breadcrumb li {display: inline;}
+ul.breadcrumb li+li:before {
+    padding: 8px;
+    color: black;
+    content: "/\00a0";
+}
+ul.breadcrumb li a {
+    color: #0275d8;
+    text-decoration: none;
+}
+ul.breadcrumb li a:hover {
+    color: #01447e;
+    text-decoration: underline;
+}
+.error-message-name {
+  display: none;
+  color: red;
+  margin-left: 200px;
+}
+.error-message-email {
+  display: none;
+  color: red;
+  margin-left: 200px;  
+}
+.error-message-mobile {
+  display: none;
+  color: red;
+  margin-left: 200px;
+}
+.error-message-password {
+  display: none;
+  color: red;
+  margin-left: 200px;
+}
+.field  input {
+    height: 40px;
+}
+.input-group-addon.fa-eye-button.field.icon {
+    height: 40px;
+    width: 29px;
+}
+
+.on {
+    color: green;
+}
+.off {
+    color: red;
+}
+
+.newIcon {
+ width: 47px;
+ margin-top: -17px;
+}
+
+
