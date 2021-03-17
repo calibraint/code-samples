@@ -18,7 +18,7 @@
   "dependencies": {
     "ajv": "^6.5.3",
     "aws-sdk": "^2.318.0",
-    "bcrypt": "^3.0.2",
+    "bcrypt": "^5.0.0",
     "chalk": "^2.4.1",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
