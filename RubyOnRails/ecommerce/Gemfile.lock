@@ -78,7 +78,9 @@ GEM
     marcel (0.3.3)
       mimemagic (~> 0.3.2)
     method_source (1.0.0)
-    mimemagic (0.3.5)
+    mimemagic (0.3.10)
+      nokogiri (~> 1)
+      rake
     mini_mime (1.0.2)
     mini_portile2 (2.5.0)
     minitest (5.14.3)
@@ -89,7 +91,8 @@ GEM
       racc (~> 1.4)
     orm_adapter (0.5.0)
     polyglot (0.3.5)
-    puma (3.12.6)
+    puma (4.3.9)
+      nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
     rack-cors (1.0.3)
@@ -163,7 +166,7 @@ DEPENDENCIES
   devise
   jsonapi-resources
   listen (>= 3.0.5, < 3.2)
-  puma (~> 3.11)
+  puma (~> 4.3)
   rack-cors
   rails (~> 5.2.4, >= 5.2.4.5)
   search_cop
